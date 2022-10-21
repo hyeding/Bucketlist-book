@@ -2,7 +2,7 @@
 name: "[\U0001F48E TIP] 좋은 팁"
 about: 개발 중 생긴 요령 및 팁 공유!
 title: ''
-labels: ''
+labels: Tip
 assignees: ''
 
 ---
