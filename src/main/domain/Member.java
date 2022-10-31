@@ -43,6 +43,7 @@ public class Member {
         this.authorities = authorities;
     }
 
+    // 회원 정보 수정
     public void updateMember(MemberUpdateDto dto, PasswordEncoder passwordEncoder) {
         if(dto.getPassword() != null) this.password = passwordEncoder.encode(dto.getPassword());
         if(dto.getMemberName() != null) this.memberName = dto.getMemberName();

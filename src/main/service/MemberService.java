@@ -53,10 +53,12 @@ public class MemberService {
     @Transactional
     public void logout(HttpServletRequest request) {
 
+        // accessToken redisTemplate 블랙리스트 추가
         String jwt = request.getHeader("Authorization").substring(7);
         ValueOperations<String, String> logoutValueOperations = redisTemplate.opsForValue();
         logoutValueOperations.set(jwt, jwt); // redis set 명령어
 
+        // refreshToken 삭제
         refreshTokenRepository.deleteByKey(String.valueOf(SecurityUtil.getLoginMemberId()))
                 .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
     }
