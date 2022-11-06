@@ -1,0 +1,34 @@
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/tockTiMan?serverTimezone=Asia/Seoul
+    username: root
+    password: buttersis13!
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+
+
+# HS512알고리즘, 64byte 이상 secret key 사용
+# echo -n 'my-name-is-byeongil-hello-jwt-hahaha-my-name-is-byeongil-hello-jwt-hahaha' | openssl base64
+#jwt:
+#  header:
+#  secret:
+#
+#  servlet:
+#    multipart:
+#      max-file-size: 100MB
+#      max-request-size: 100MB
+#
+#  redis:
+#    port: 6379
+#    host: localhost
