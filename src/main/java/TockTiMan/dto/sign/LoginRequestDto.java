@@ -16,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 @ApiModel(value = "로그인 요청")
 public class LoginRequestDto {
 
-    @ApiModelProperty(value = "아이디", notes = "아이디를 입력해주세요", required = true, example = "sosow0212")
+    @ApiModelProperty(value = "아이디", notes = "아이디를 입력해주세요", required = true, example = "hongildong1234")
     @NotBlank(message = "{LoginRequestDto.username.notBlank}")
     private String username;
 

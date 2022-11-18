@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
+@PropertySource("classpath:secure.properties")
 public class TokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";

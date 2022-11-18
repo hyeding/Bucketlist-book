@@ -23,7 +23,7 @@ public class MessageCreateRequest {
     @NotBlank(message = "메시지 내용을 입력해주세요.")
     private String content;
 
-    @ApiModelProperty(value = "수신자 닉네임", notes = "수신자 닉네임을 입력하세요.", required = true, example = "user30")
+    @ApiModelProperty(value = "수신자 닉네임", notes = "수신자 닉네임을 입력하세요.", required = true, example = "user1")
     @NotNull(message = "받는 사람 닉네임을 입력해주세요")
     private String receiverNickname;
 }

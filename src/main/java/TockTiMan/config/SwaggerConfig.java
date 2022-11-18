@@ -28,7 +28,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.OAS_30)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("TockTiMan.community.controller"))
+                .apis(RequestHandlerSelectors.basePackage("TockTiMan.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .securityContexts(Arrays.asList(securityContext()))
@@ -37,7 +37,7 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Community")
+                .title("TockTiMan")
                 .description("Community REST API Documentation")
                 .license("g31373947@gmail.com")
                 .licenseUrl("https://github.com/hyeding")
