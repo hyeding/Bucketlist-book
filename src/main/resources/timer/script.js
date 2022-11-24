@@ -3,10 +3,10 @@ const hoursEl = document.getElementById('hours')
 const minsEl = document.getElementById('mins')
 const secondsEl = document.getElementById('seconds')
 
+
 function countDown(){
     const newYear = new Date(2022, 11, 1)
     const current = new Date()
-
 
     const diffTime = Math.abs(newYear-current)
 
@@ -19,10 +19,12 @@ function countDown(){
     hoursEl.innerHTML = formatTime(hours)
     minsEl.innerHTML = formatTime(mins)
     secondsEl.innerHTML = formatTime(seconds)
+
 }
 function formatTime(time){
     return time < 10 ? (`0${time}`) : (time);
 }
+
 countDown()
 
 setInterval(countDown, 1000)
