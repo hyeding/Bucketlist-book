@@ -38,6 +38,12 @@ public class AuthController {
         return success(authService.signIn(req));
     }
 
+//    @ApiOperation(value = "로그아웃", notes = "로그아웃을 한다.")
+//    @ResponseStatus(HttpStatus.OK)
+//    @PostMapping("/logout")
+//    public Response logout(@Valid @RequestBody LogoutRequestDto logoutRequestDto) {
+//        return success(authService.logout(logoutRequestDto));
+//    }
 
     @ApiOperation(value = "토큰 재발급", notes = "토큰 재발급 요청")
     @ResponseStatus(HttpStatus.OK)

@@ -15,6 +15,7 @@ import javax.management.relation.RoleNotFoundException;
 @RestControllerAdvice
 @Slf4j
 public class ExceptionAdvice {
+
     // 500 에러
     @ExceptionHandler(IllegalArgumentException.class) // 지정한 예외가 발생하면 해당 메소드 실행
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) // 각 예외마다 상태코드 지정
@@ -33,7 +34,7 @@ public class ExceptionAdvice {
     }
 
     // 400 에러
-    // 요청 객체의 validation 을 수행할 때, MethodrgumentNotValidException 이 발생
+    // 요청 객체의 validation 을 수행할 때, MethodArgumentNotValidException 이 발생
     // 각 검증 어노테이션 별로 지정해놨던 메세지를 응답
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

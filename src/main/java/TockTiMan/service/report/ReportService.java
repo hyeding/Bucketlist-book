@@ -46,7 +46,7 @@ public class ReportService {
             UserReport userReport = new UserReport(reporter.getId(), reportedUser.getId(), req.getContent());
             userReportRepository.save(userReport);
 
-            if (userReportRepository.findByReportedUserId(req.getReportedUserId()).size() >= 3) {
+            if (userReportRepository.findByReportedUserId(req.getReportedUserId()).size() >= 10) {
                 // 신고 수 10 이상일 시 true 설정
                 reportedUser.setReported(true);
             }
@@ -71,7 +71,6 @@ public class ReportService {
             // 신고 한 적이 없다면, 테이블 생성 후 신고 처리
             BoardReport boardReport = new BoardReport(reporter.getId(), reportedBoard.getId(), req.getContent());
             boardReportRepository.save(boardReport);
-
 
             if (boardReportRepository.findByReportedBoardId(req.getReportedBoardId()).size() >= 10) {
                 // 신고 수 10 이상일 시 true 설정

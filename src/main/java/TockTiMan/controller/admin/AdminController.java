@@ -45,9 +45,6 @@ public class AdminController {
         return Response.success(adminService.unlockBoard(id));
     }
 
-
-    // 밑에서부터 7월 7일 비행기 작업 (포스트맨 테스트 이후, 커밋 필요)
-
     @ApiOperation(value = "카테고리 관리", notes = "카테고리를 관리합니다.")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/admin/manages/category")
