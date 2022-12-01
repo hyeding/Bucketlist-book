@@ -4,21 +4,25 @@ import TockTiMan.config.jwt.TokenProvider;
 import TockTiMan.dto.sign.*;
 import TockTiMan.entity.user.Authority;
 import TockTiMan.entity.user.User;
-import TockTiMan.exception.LoginFailureException;
-import TockTiMan.exception.MemberEmailAlreadyExistsException;
-import TockTiMan.exception.MemberNicknameAlreadyExistsException;
-import TockTiMan.exception.MemberUsernameAlreadyExistsException;
+import TockTiMan.exception.*;
 import TockTiMan.repository.refreshToken.RefreshTokenRepository;
 import TockTiMan.repository.user.UserRepository;
+import TockTiMan.response.Response;
 import TockTiMan.service.redis.RedisService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.redis.core.RedisTemplate;
+import java.util.concurrent.TimeUnit;
 
+import static TockTiMan.response.Response.success;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -29,12 +33,13 @@ public class AuthService {
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final RedisService redisService;
+    private final RedisTemplate redisTemplate;
 
     @Transactional
     public void signup(SignUpRequestDto req) {
         validateSignUpInfo(req);
 
-        // Builder로 리팩토링 해야함
+        // Builder 로 리팩토링 해야함
         User user = new User();
         user.setUsername(req.getUsername());
         user.setPassword(passwordEncoder.encode(req.getPassword()));
@@ -43,6 +48,14 @@ public class AuthService {
         user.setEmail(req.getEmail());
         user.setAuthority(Authority.ROLE_USER);
         userRepository.save(user);
+
+//        // Builder 로 리팩토링
+//        User user = User.builder()
+//                .email(signup.getEmail())
+//                .password(passwordEncoder.encode(signup.getPassword()))
+//                .roles(Collection.singletonList(Authority.ROLE_USER.name()))
+//                .build();
+//        userRepository.save(user);
     }
 
 
@@ -117,6 +130,30 @@ public class AuthService {
         return tokenResponseDto;
     }
 
+    @Transactional
+    public Response logout(LogoutRequestDto logoutRequestDto) {
+        // Access Token 검증
+        if (! tokenProvider.validateToken(logoutRequestDto.getAccessToken())) {
+            throw new LogoutFailureException();
+        }
+
+        // Access Token 에서 User 정보를 가져옴
+        Authentication authentication = tokenProvider.getAuthentication(logoutRequestDto.getAccessToken());
+
+        // Redis 에서 해당 User 정보로 저장된 refresh Token 이 있는지 여부 확인 후 있을 경우 삭제
+        if (redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
+            // refresh Token 삭제
+            redisTemplate.delete("RT:" + authentication.getName());
+        }
+
+        // 해당 Access Token 유효기간을 가지고와서 제거대상으로 저장
+        Long expiration = tokenProvider.getExpiration(logoutRequestDto.getAccessToken());
+        redisTemplate.opsForValue()
+                .set(logoutRequestDto.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+
+        return success("로그아웃 되었습니다.");
+
+    }
 
     private void validateSignUpInfo(SignUpRequestDto signUpRequestDto) {
         if (userRepository.existsByUsername(signUpRequestDto.getUsername()))

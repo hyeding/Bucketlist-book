@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @ApiModel(value = "회원가입 요청")
@@ -37,7 +38,7 @@ public class SignUpRequestDto {
 
     @ApiModelProperty(value = "이메일", notes = "이메일은 알파벳과 숫자로 입력해주세요.", required = true, example = "gildong@gildong.com")
     @NotBlank(message = "올바른 이메일 주소를 입력해주세요.")
-    @Email(message = "이메일 형식에 맞지 않습니다.")
+    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식에 맞지 않습니다.")
     private String email;
 
 
