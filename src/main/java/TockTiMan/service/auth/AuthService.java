@@ -130,30 +130,30 @@ public class AuthService {
         return tokenResponseDto;
     }
 
-    @Transactional
-    public Response logout(LogoutRequestDto logoutRequestDto) {
-        // Access Token 검증
-        if (! tokenProvider.validateToken(logoutRequestDto.getAccessToken())) {
-            throw new LogoutFailureException();
-        }
-
-        // Access Token 에서 User 정보를 가져옴
-        Authentication authentication = tokenProvider.getAuthentication(logoutRequestDto.getAccessToken());
-
-        // Redis 에서 해당 User 정보로 저장된 refresh Token 이 있는지 여부 확인 후 있을 경우 삭제
-        if (redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
-            // refresh Token 삭제
-            redisTemplate.delete("RT:" + authentication.getName());
-        }
-
-        // 해당 Access Token 유효기간을 가지고와서 제거대상으로 저장
-        Long expiration = tokenProvider.getExpiration(logoutRequestDto.getAccessToken());
-        redisTemplate.opsForValue()
-                .set(logoutRequestDto.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
-
-        return success("로그아웃 되었습니다.");
-
-    }
+//    @Transactional
+//    public Response logout(LogoutRequestDto logoutRequestDto) {
+//        // Access Token 검증
+//        if (! tokenProvider.validateToken(logoutRequestDto.getAccessToken())) {
+//            throw new LogoutFailureException();
+//        }
+//
+//        // Access Token 에서 User 정보를 가져옴
+//        Authentication authentication = tokenProvider.getAuthentication(logoutRequestDto.getAccessToken());
+//
+//        // Redis 에서 해당 User 정보로 저장된 refresh Token 이 있는지 여부 확인 후 있을 경우 삭제
+//        if (redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
+//            // refresh Token 삭제
+//            redisTemplate.delete("RT:" + authentication.getName());
+//        }
+//
+//        // 해당 Access Token 유효기간을 가지고와서 제거대상으로 저장
+//        Long expiration = tokenProvider.getExpiration(logoutRequestDto.getAccessToken());
+//        redisTemplate.opsForValue()
+//                .set(logoutRequestDto.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+//
+//        return success("로그아웃 되었습니다.");
+//
+//    }
 
     private void validateSignUpInfo(SignUpRequestDto signUpRequestDto) {
         if (userRepository.existsByUsername(signUpRequestDto.getUsername()))
